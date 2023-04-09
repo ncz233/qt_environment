@@ -1,0 +1,101 @@
+#加载模块   core核心模块    gui界面模块
+QT       += core gui
+
+#当qt版本大于4 qt5需要加上widgets模块
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+#配置c++11 让qt支持c++11语法 lambda
+CONFIG += c++11
+
+# The following define makes your compiler emit warnings if you use
+# any Qt feature that has been marked deprecated (the exact warnings
+# depend on your compiler). Please consult the documentation of the
+# deprecated API in order to know how to port your code away from it.
+#使用已经过时的函数标记为警告,默认启用
+DEFINES += QT_DEPRECATED_WARNINGS
+
+# You can also make your code fail to compile if it uses deprecated APIs.
+# In order to do so, uncomment the following line.
+# You can also select to disable deprecated APIs only up to a certain version of Qt.
+#使用已经过时的api当作错误,默认没启用
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+#项目里面的源文件,不能删除,删了就不展示了,启动还是能启动的
+SOURCES += \
+    main.cpp \
+    mainwindow.cpp
+
+#项目里面的头文件
+HEADERS += \
+    mainwindow.h
+
+#项目里面的ui文件
+FORMS += \
+    mainwindow.ui
+
+#默认构建格式
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin  #嵌入式平台
+else: unix:!android: target.path = /opt/$${TARGET}/bin  #unix平台
+!isEmpty(target.path): INSTALLS += target   #不用管
+
+;;*************************************************************************************
+#include "mainwindow.h" //包含我们自己写的类的头文件
+
+#include <QApplication> //应用程序类
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv); //创建一个类,有且只能有一个
+    MainWindow w;   //自定义一个窗口对象
+    char c[] = "hello world";
+    char* cp = c;
+    w.print(cp);
+    //w.show();   //手动显示窗口
+    return a.exec();    //应用程序消息循环,相当于while,消息处理,消息接听
+}
+
+;;************************************************************************************
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+
+QT_BEGIN_NAMESPACE  //标识一下位移
+namespace Ui { class MainWindow; }  //有一个包含这个类
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow   //继承于系统的QMainWindow类
+{
+    Q_OBJECT    //使用信号与槽必须包含的一个宏
+
+public:
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+    void print(char* c);
+
+private:
+    Ui::MainWindow *ui;
+};
+#endif // MAINWINDOW_H
+
+;;*********************************************************************************
+#include "mainwindow.h" //包含自己的
+#include "ui_mainwindow.h"  //这个是forms的界面头文件
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)   //构造函数初始化列表传入父类中去
+    , ui(new Ui::MainWindow)    //也是一个初始化列表
+{
+    ui->setupUi(this);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::print(char* c)
+{
+        printf("%s",c);
+}
