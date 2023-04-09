@@ -1,1 +1,27 @@
+//**************************.pro
+#加载基础目模块
+QT += core gui widgets
 
+CONFIG += c++11
+
+SOURCES += \
+    main.cpp
+
+//************************.cpp
+#include<QApplication>
+#include<QtWidgets>
+#include<QtDebug>
+
+int main(int argc, char* argv[])
+{
+    QApplication a(argc,argv);
+
+    QWidget w;
+
+    w.show();
+    //qt头文件,一般头文件和类名是一致的,在qt中所有的头文件都是以Q开头的
+    qDebug()<<"hello world"<<endl;//这个是在debug中输出,不是在窗口中输出
+    [](){};//会报错,但是qt版本高所以自动加上c++11里的特性,但严谨一点就需要加上
+
+    return a.exec();
+}
