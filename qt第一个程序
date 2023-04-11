@@ -1,0 +1,56 @@
+#include "living_example_1.h"
+#include <QtWidgets/QApplication>
+#include <QtWidgets/qlabel.h>
+#include <QtWidgets/qpushbutton.h>
+
+//第一个qt程序
+//创建按工程目录
+// mkdir hello
+// 之一每个qt程序都哟啊放在一个独立的工程目录下
+//进入工程目录编写源代码
+// vi main.cpp
+// 注 : 语法和c++基本一致, 但是用qt的类库不在是标准c++的库
+//了解开发过程
+//	构建工程
+//	 执行"qmake-project", 生成工程文件(hello.pro)
+//	 注意 : 需要添加构建选项, QT += widgets
+//	创建makefile
+//	 执行"qmake", 可以根据上一步的工程文件自动生成make
+//	编译链接
+//	 在执行"make"即可完成编译和链接
+//	测试
+//	 执行"./hello"默认名字和功臣改名字一致
+//	一个小练习, 创建标签的时候顺便把按钮也创建了
+//	 标签(qlabel) 按钮(qpushbutton)
+//	 在qt程序中有多个窗口是很正常的
+//乱码的问题
+// 字符编码任何字符在计算机内部都是用数字表示的,即字符编码
+// 不同国家和地区哦都为自己的语言定义了不同的编码标准,所以会乱码
+// 然后有一个统一编码,这个编码支持所有国家的编码叫unicode
+// 根据字长的不同,被分为ucs-2和ucs-4
+//ucs转换格式(ucs transformation format,utf)
+// 无论是ucs-2还是ucs-4.作为unicode字符集,他们都只是规定了如何对一个字符编码,但并没有规定如何传输,保存这个编码,即在程序中如如何表示这个编码,而utf所要解决的就是这个问题.根据转换算法的不同可被分为:utf-8,utf-16,utf--32
+//qt内部的编码
+// qt应用程序编程接口及内部实现所使用的字符,都是以unicode编码(utf-16)也就是unicode就是qt的内部编码
+//外部编码
+// 程序原地阿玛中使用的字面值形式的字符和字符串,用户通过程序界面输入的字符和字符串,以及程序通过文件,网络,进程间通信或其他媒介读取的字符和字符串,受系统环境等隐私的影响,通常会是各种各样的编码格式,一般将其统称为外部编码
+//
+//
+//
+
+int main(int argc, char *argv[])
+{
+	//创建qt应用程序对象
+    QApplication a(argc, argv);
+    //living_example_1 w;
+    //w.show();
+	//创建按标签控件和按钮控件
+	QLabel label("hello world\n");
+	QPushButton pushbutton("我是按钮\n");
+
+	//显示标签控件和按钮控件
+	pushbutton.show();
+	label.show();
+
+    return a.exec();
+}
