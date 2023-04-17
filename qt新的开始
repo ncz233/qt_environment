@@ -11,5 +11,183 @@
 //3)返回值
 //
 //课程安排
-// 第一天:qt介绍,qt框架,项目文件,第一个qt程序
+// 第一天:(很重要)
+//  1.qt介绍
+//  2.qt框架
+//  3.项目文件(.pro)
+//  4.第一个qt程序(hello qt)
+//  5.父窗口和子窗口的区别(控件,部件,构件)
+//  6.中断信号和槽(这个是重点)
+//  7.坐标系统
+//  8.内存回收机制 new delete,qt内部有回收系统不过有前提
+//  9.带菜单栏的窗口
+//  10.对话框
+// 
+// 第二天:
+//  1.Qtcreator界面设计器
+//  2.常用空间
+//  3.布局
+//  4.自定义控件
+//  5.常用事件的处理(跟信号和槽有点像)
 //
+// 第三天:
+//  1.Qpainter绘图
+//  2.绘图设备(QPixmap,QImage,QBitmap,QPicture)
+//  3.文件操作(QFile,QFileInfo,QdataStream,QTextStream,QBuffter)
+// 
+// 第四天:(先学完网络和多线程编程在学这个)
+//  1.tcp编程
+//  2.udp编程
+//  3.udp传输图片
+//  4.多线程编程(多任务)
+// 
+// 第五天上午:数据库编程简单用qsl语句(可以图形界面)
+// 第五天下午-第六天:汽车销售管理系统
+//
+//qt是一个跨平台图形用户界面应用程序框架(gui编程)把我们要功能封装成一个类
+//小提示:linux有两个桌面一个是kde一个是gnome,其中kde是qt写的,qt文件不要有中文路径
+//
+//基类,派生类
+// 头文件,主函数,return xxx
+// QtWidgets/QApplication应用程序类
+// qt头文件没有.h
+// 头文件和类名一样
+// 
+// 框架就是
+//int main(int argc, char *argv[])
+//{
+//  QApplication a(argc, argv);
+// 
+//  自己写代码的地方,
+// 
+//  return a.exec();
+//}
+//
+//文件.pro中需要#注释,还有模块([QT ＋ = core gui]如果不知道选中头文件按f1),当然vs环境下看不见,模块vs可以选中项目->属性->pt project settings->qt modules中设置
+//其次是为了兼容qt4兼容而已:greaterThan(QT_MAJOR_VERSION,4): QT+= widgets
+//应用程序的名字,把原来的exe文档删了然后在执行就变量:TARGET = mike
+//指令makefile的类型,app,也可以生成库lib:TEMPLATE =app
+//源文件.cpp:sOURCES += main. cpp l  \n  mywidget.cpp
+//头文件.h:HEADERS+=mywidget.h
+//
+//qt5按模块开分,有
+// qt widgets(gui)
+// qt webkit(浏览器引擎)
+// qt text(测试单元)
+// qt sql(数据库单元)
+// qt quick(另外的框架用js)
+// qt qml(另外的框架js)
+// qt mulitmedia widgets(多媒体)
+// qt core(内部资本模块,写不写都一样)
+// qt gui(内部资本模块,写不写都一样)
+// qt network(网络)
+// qt mulitmedia(多媒体)
+// qt quick controls(另外的框架js)
+// qt quick dialogs(另外的框架js)
+//
+
+int main(int argc, char *argv[])
+{
+    //固定框架,有且只有一个应用程序类的对象
+    QApplication a(argc, argv);
+    
+    //qt_day01继承于QWidget,QWidget是一个窗口基类
+    //所以qt_day01也是窗口类
+    //w就是一个窗口
+    qt_day01 w;
+
+    //窗口创建默认是隐藏的,需要认为显示
+    w.show();//是显示窗口的注释掉不会显示窗口但程序还在运行
+    
+    //窗口不会停止,通过循环都是这句话a.exec()的功劳
+    return a.exec();//让程序以值执行,等待用户操作,等待事件发生
+}
+Q_OBJECT//信号与槽的时候会需要到
+
+//实现父子窗口功能
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <QApplication>
+#include <QWidget>//窗口空间基类
+#include<QPushbutton>
+
+int main(int argc, char** argv)
+{
+	QApplication app(argc, argv);
+
+	QWidget w;
+	w.setWindowTitle("1234\n");//设置标题
+
+	QPushButton b;
+	b.setText("123");
+	//创建控件时默认时隐藏的需要手动
+
+	//如果不指定父对象,对象和对象(窗口和窗口)没关系,独立的
+	//a执行b为它的父对象,a放在b的上面
+	//指定父对象,有两种方式,setParent和通过构造函数传参
+	//指定父对象,只需要父对象显示,上面的子对象自动显示
+	
+	b.setParent(&w);//指定父类
+	b.move(100, 100);//移动坐标
+
+	QPushButton b1(&w);//通过构造函数传参
+	b1.setText("abc");
+
+	w.show();
+	return app.exec();
+}
+
+//开始写在类中实现的功能了
+#include "my_signalandslot.h"
+#include <QtWidgets/QApplication>
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    My_SignalAndSlot w;//先执My_SignalAndSlot行构造函数
+    w.show();
+
+    return a.exec();
+}
+
+#pragma once
+#include <QtWidgets/QWidget>
+#include "ui_my_signalandslot.h"
+#include <QPushButton>
+
+class My_SignalAndSlot : public QWidget
+{
+    Q_OBJECT
+
+public:
+    My_SignalAndSlot(QWidget *parent = nullptr);
+    ~My_SignalAndSlot();
+
+private:
+    Ui::My_SignalAndSlotClass ui;
+    QPushButton b1;
+    QPushButton* b2;
+};
+
+#include "my_signalandslot.h"
+
+My_SignalAndSlot::My_SignalAndSlot(QWidget *parent)
+    : QWidget(parent)
+{
+    ui.setupUi(this);
+    b1.setParent(this);
+    b1.setText("123");
+    b1.move(100,100);
+
+    b2 = new QPushButton(this);
+    b2->setText("abc");
+
+    //&b1 信号发出者,指针类型.
+    //&QPushButton::pressed 处理的信号, &发送者的类名::信号名字
+    //this 信号接收者
+    //&My_SignalAndSlot::close 槽函数,信号处理函数 &接收的类名::槽函数名字
+    connect(&b1, &QPushButton::pressed, this, &My_SignalAndSlot::close);
+    //意思就是,connect是关键字,谁发出的,发送者有类吧::然后找到要和处理的信号,谁接收,接收者的类::槽函数名字
+}
+
+My_SignalAndSlot::~My_SignalAndSlot()
+{}
+
