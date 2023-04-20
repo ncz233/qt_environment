@@ -350,3 +350,99 @@ void My_SignalAndSlot::dealSub(int a,QString str)
 
 My_SignalAndSlot::~My_SignalAndSlot()
 {}
+
+04坐标
+#include "my_qt_xy.h"
+#include <QtWidgets/QApplication>
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    my_QT_XY w;
+    w.show();
+    return a.exec();
+}
+
+
+#pragma once
+
+#include <QtWidgets/QWidget>
+#include "ui_my_qt_xy.h"
+#include <QPushButton>
+#include "MyButton.h"
+
+class my_QT_XY : public QWidget
+{
+    Q_OBJECT
+
+public:
+    my_QT_XY(QWidget *parent = nullptr);
+    ~my_QT_XY();
+
+private:
+    Ui::my_QT_XYClass ui;
+};
+
+
+#pragma once
+
+#include <QPushButton>
+#include <QDebug>
+
+//根据参数列表给基类构造函数传参
+class MyButton  : public QPushButton
+{
+	Q_OBJECT
+
+public:
+	MyButton(QWidget *parent);
+	~MyButton();
+};
+
+
+///////////////////////////////////////////////////////////
+#include "my_qt_xy.h"
+
+my_QT_XY::my_QT_XY(QWidget *parent)
+    : QWidget(parent)
+{
+    ui.setupUi(this);
+    //坐标系统
+    //对于父窗口(主窗口),坐标系统相对于屏幕
+    //原点:相对于屏幕左上角(不包括边框)
+    // x
+    // y
+    move(100, 100);
+    QPushButton* b1 = new QPushButton(this);
+    b1->move(100, 100);
+    b1->setText("^_^");
+    b1->resize(100, 100);
+
+    QPushButton* b2 = new QPushButton(b1);
+    b2->move(10, 10);
+    b2->setText("QAQ");
+
+    //对象树,有个前提条件是继承于qobject
+    //当我程序结束的时候他会自动回收,只要我们指定父对象,结束的时候会按照先释放子对象,在释放父对象,类似树的后序遍历
+    MyButton* b3 = new MyButton(this);
+    b3->setText("123");
+    //指定父对象后,直接或间接继承于QObject
+    //子对象如果是动态分配空间的new,不需要手动释放delete,系统就会自动释放
+    //意思是主窗口有个析构函数，这里会析构掉所有子类在堆区的内存
+    //new之后就需要自己使用delete来释放c++不会,如果以直new的话和ide怎么处理,一般情况下vs2019在这个程序new内存空间达到4G就会自动中断
+}
+
+my_QT_XY::~my_QT_XY()
+{}
+
+
+#include "MyButton.h"
+
+MyButton::MyButton(QWidget *parent)
+	: QPushButton(parent)
+{}
+
+MyButton::~MyButton()
+{
+	qDebug() << "an_niu_bei_xi_gou";
+}
